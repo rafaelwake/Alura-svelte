@@ -1,60 +1,77 @@
 <script lang="ts">
-  import Titulo from "./components/Titulo.svelte";
   import BarraSuperior from "./components/BarraSuperior.svelte";
+  import Titulo from "./components/Titulo.svelte";
+  import type IUsuario from "./interfaces/IUsuario";
 
-  let valorInput;
+  let usuario: IUsuario | null = null;
 
-  function aoSubmeter(evento) {
-    console.log(valorInput);
+  let valorInput = null;
+
+  function aoSubmeter() {
+    usuario = {
+      avatar_url: "https://github.com/rafaelwake.png",
+      login: "rafaelwake",
+      nome: "Rafael",
+      perfil_url: "https://github.com/rafaelwake",
+      repositorios_publicos: 2,
+      seguidores: 3,
+    };
   }
 </script>
 
 <div class="app">
   <header>
     <Titulo />
+
     <div class="busca-usuario">
       <form on:submit|preventDefault={aoSubmeter}>
         <input type="text" class="input" bind:value={valorInput} />
+
         <div class="botao-container">
-          <button class="botao" type="submit">Buscar</button>
+          <button type="submit" class="botao">Buscar</button>
         </div>
       </form>
     </div>
   </header>
-  <div class="card-usuario">
-    <BarraSuperior />
 
-    <div class="usuario">
-      <div class="foto-container">
-        <a
-          href="https://github.com/rafaelwake"
-          target="_blank"
-          rel="noopener"
-        />
-        <div class="foto-usuario" />
-      </div>
-      <div class="detalhes-usuario">
-        <div class="info">
-          Nome: <span>Rafael</span>
+  {#if usuario}
+    <div class="card-usuario">
+      <BarraSuperior />
+
+      <div class="usuario">
+        <div class="foto-container">
+          <a href={usuario.perfil_url} target="_blank" rel="noopener">
+            <div
+              class="foto-usuario"
+              style:background-image="url({usuario.avatar_url})"
+            />
+          </a>
         </div>
-        <div class="info">
-          Usuário: <span>rafaelwake</span>
-        </div>
-        <div class="info">
-          Seguidores: <span>3</span>
-        </div>
-        <div class="info">
-          Repositorio: <span>3</span>
+
+        <div class="detalhes-usuario">
+          <div class="info">
+            Nome: <span>{usuario.nome}</span>
+          </div>
+          <div class="info">
+            Usuário: <span>{usuario.login}</span>
+          </div>
+          <div class="info">
+            Seguidores: <span>{usuario.seguidores}</span>
+          </div>
+          <div class="info">
+            Repositórios: <span>{usuario.repositorios_publicos}</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  {/if}
 </div>
 
 <style>
   .app {
     max-height: 100vh;
   }
+
   header {
     display: flex;
     align-items: center;
@@ -118,41 +135,33 @@
   .card-usuario {
     margin-top: 65px;
   }
-
   .usuario {
     padding: 28px 0;
     background: rgba(255, 255, 255, 0.5);
     box-shadow: -12px 37px 45px rgba(133, 127, 201, 0.18);
     border-radius: 0px 0px 13px 13px;
-
     display: flex;
     justify-content: center;
   }
-
   .foto-container {
     margin-right: 81px;
   }
-
   .foto-usuario {
     width: 12.75rem;
     height: 12.75rem;
     border: 4.56px solid #2e80fa;
     border-radius: 50%;
     background-size: cover;
-    background-image: url("https://github.com/rafaelwake.png");
   }
-
   .detalhes-usuario {
     margin-right: 55px;
   }
-
   .detalhes-usuario > .info {
     font-weight: 600;
     font-size: 20px;
     line-height: 31px;
     color: #395278;
   }
-
   .detalhes-usuario > .info > span {
     color: #6781a8;
     font-weight: normal;
